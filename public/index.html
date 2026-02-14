@@ -1,19 +1,363 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Yuri Vilela | Desenvolvedor Fullstack</title>
+
+    <meta content="Yuri Vilela - Desenvolvedor Fullstack especializado em Laravel, PHP e modernização de sistemas legados."
+          name="description">
+    <meta content="Yuri Vilela" name="author">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .tricolor-border {
+            border-image: linear-gradient(to right, #e11d48 33%, #fff 33%, #fff 66%, #000 66%) 1;
+            /*border-image: linear-gradient(to right, #000 33%, #fff 33%, #fff 66%, #e11d48 66%) 1;*/
+            border-width: 8px;
+            border-style: solid;
+        }
+
+        .spfc-gradient {
+            /* Sequência: Vermelho (0-40%), Branco (40-60%), Preto (60-100%) */
+            background: linear-gradient(135deg, #e11d48 0%, #e11d48 40%, #fff 40%, #fff 60%, #000 60%, #000 100%);
+        }
+
+        .floating-button {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
 </head>
-<body>
-<h1>Yuri Vilela</h1>
-<p>Desenvolvedor Fullstack</p>
 
-<p>PHP • Laravel • SQL • Docker</p>
+<body class="bg-white text-black antialiased transition-all duration-500">
 
-<p>
-    <a href="https://github.com/yurivilela1704">GitHub</a> |
-    <a href="https://www.linkedin.com/in/yuri-vilela/">LinkedIn</a> |
-    <a href="/curriculo.pdf">Currículo</a>
-</p>
+<header class="bg-black text-white border-b-4 border-red-600">
+    <div class="max-w-5xl mx-auto px-4 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+
+        <div class="flex items-center gap-6">
+            <div class="w-24 h-24 rounded-full border-4 border-red-600 overflow-hidden bg-zinc-800 shrink-0">
+                <img alt="Yuri Vilela" class="w-full h-full object-cover" src="eu.jpeg">
+            </div>
+
+            <div>
+                <h1 class="text-2xl md:text-2xl font-black tracking-tighter cursor-pointer" id="name">
+                    Yuri Vilela
+                </h1>
+                <p class="text-red-500 font-bold tracking-widest text-sm md:text-base">
+                    Desenvolvedor Fullstack
+                </p>
+
+                <div class="flex gap-4 mt-3">
+                    <a aria-label="GitHub" href="https://github.com/yurivilela1704" rel="noopener noreferrer"
+                       target="_blank">
+                        <i class="w-6 h-6 hover:text-red-500 transition-colors" data-lucide="github"></i>
+                    </a>
+                    <a aria-label="LinkedIn" href="https://www.linkedin.com/in/yuri-vilela/" rel="noopener noreferrer"
+                       target="_blank">
+                        <i class="w-6 h-6 hover:text-red-500 transition-colors" data-lucide="linkedin"></i>
+                    </a>
+                    <a aria-label="Email" href="mailto:yurimarquez1704@gmail.com">
+                        <i class="w-6 h-6 hover:text-red-500 transition-colors" data-lucide="mail"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+            <div class="text-[10px] text-zinc-400 uppercase tracking-[0.2em] font-bold text-right">
+                Uberlândia - MG | São Carlos - SP | Brasil
+            </div>
+        </div>
+
+    </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-4 py-20 space-y-24">
+
+    <!-- SOBRE -->
+    <section>
+        <div class="flex items-center gap-4 mb-8">
+            <div class="h-10 w-2 bg-red-600"></div>
+            <h2 class="text-4xl font-black uppercase tracking-tight">Sobre Mim</h2>
+        </div>
+
+        <div class="space-y-6 text-xl text-zinc-700 leading-relaxed max-w-4xl">
+            <p>
+                Desenvolvedor fullstack com forte atuação em backend, especializado na modernização de aplicações
+                legadas
+                e evolução arquitetural de sistemas em produção. Experiência sólida com PHP, Laravel e ecossistema SQL,
+                mantendo abertura e adaptabilidade a diferentes stacks e contextos tecnológicos. Sempre com foco em
+                estabilidade, escalabilidade e qualidade de código.
+            </p>
+
+            <p>
+                Atuo no desenvolvimento e evolução contínua do sistema, contribuindo com refatorações estruturais,
+                atualização de dependências críticas e migrações entre versões major de frameworks, sempre com foco em
+                estabilidade, performance e redução de dívida técnica.
+            </p>
+
+            <div class="flex flex-wrap gap-3 pt-6">
+                <span class="bg-black text-white px-4 py-1.5 text-xs font-black rounded-full uppercase tracking-widest border border-red-600/30 hover:scale-110 hover:border-red-600 transition-all cursor-default">PHP / Laravel</span>
+                <span class="bg-black text-white px-4 py-1.5 text-xs font-black rounded-full uppercase tracking-widest border border-red-600/30 hover:scale-110 hover:border-red-600 transition-all cursor-default">SQL</span>
+                <span class="bg-black text-white px-4 py-1.5 text-xs font-black rounded-full uppercase tracking-widest border border-red-600/30 hover:scale-110 hover:border-red-600 transition-all cursor-default">Docker</span>
+                <span class="bg-black text-white px-4 py-1.5 text-xs font-black rounded-full uppercase tracking-widest border border-red-600/30 hover:scale-110 hover:border-red-600 transition-all cursor-default">ElasticSearch</span>
+                <span class="bg-black text-white px-4 py-1.5 text-xs font-black rounded-full uppercase tracking-widest border border-red-600/30 hover:scale-110 hover:border-red-600 transition-all cursor-default">Git</span>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="space-y-12" id="experiencia">
+        <div class="flex items-center gap-4">
+            <div class="h-10 w-2 bg-red-600"></div>
+            <h2 class="text-4xl font-black uppercase tracking-tight">Experiência</h2>
+        </div>
+
+        <div class="space-y-16">
+
+            <!-- NoCartorio -->
+            <div class="group relative pl-10 border-l-2 border-zinc-200 hover:border-red-600 transition-colors duration-300">
+
+                <!-- marcador -->
+                <div class="absolute -left-[11px] top-1 w-5 h-5 bg-white border-2 border-red-600 rounded-full group-hover:bg-red-600 transition-colors duration-300"></div>
+
+                <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-3">
+                    <h3 class="text-2xl font-black uppercase tracking-tight">
+                        Software Developer
+                    </h3>
+                    <span class="text-red-600 font-black text-lg">
+                    2022 – Atual
+                </span>
+                </div>
+
+                <p class="text-xl font-bold text-zinc-500 mb-6">
+                    NoCartorio.com
+                </p>
+
+                <ul class="space-y-4 text-zinc-700 leading-relaxed">
+                    <li class="flex gap-3">
+                        <span class="text-red-600 font-bold">»</span>
+                        <span>
+                            Atuo na integração do sistema com tribunais estaduais como TJTO, TJPA, TJMG, contribuindo
+                            para a expansão do produto para novos estados.
+
+                            Também participei da integração com centrais nacionais como SIRC, CRC, ONR, CENSEC, CNIB,
+                            atuando na implementação de web services, tratamento de layouts específicos e adequação às normas de cada órgão.
+                        </span>
+                    </li>
+
+                    <li class="flex gap-3">
+                        <span class="text-red-600 font-bold">»</span>
+                        <span>
+                            Fui responsável por conduzir a migração do sistema principal de Laravel 5 para Laravel 11,
+                            com apoio da equipe, garantindo estabilidade e continuidade operacional.
+                        </span>
+                    </li>
+
+                    <li class="flex gap-3">
+                        <span class="text-red-600 font-bold">»</span>
+                        <span>
+                        Atualização e substituição de dependências, reduzindo dívida técnica, focando em melhorias
+                            de performance, usabilidade e segurança da aplicação.
+                    </span>
+                    </li>
+
+                    <li class="flex gap-3">
+                        <span class="text-red-600 font-bold">»</span>
+                        <span>
+                        Implementação do ElasticSearch do zero utilizando
+                        <code class="bg-zinc-100 px-1.5 py-0.5 rounded font-mono text-sm text-red-600">
+                            babenkoivan/elastic-scout-driver
+                        </code>, estruturando sistema de busca escalável e performático.
+                    </span>
+                    </li>
+
+                    <li class="flex gap-3">
+                        <span class="text-red-600 font-bold">»</span>
+                        <span>
+                            Participação em decisões arquiteturais e de produto, contribuindo para definição de padrões e
+                            melhoria contínua da estrutura do projeto.
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Robótica -->
+            <div class="group relative pl-10 border-l-2 border-zinc-200 hover:border-red-600 transition-colors duration-300">
+
+                <!-- marcador -->
+                <div class="absolute -left-[11px] top-1 w-5 h-5 bg-white border-2 border-red-600 rounded-full group-hover:bg-red-600 transition-colors duration-300"></div>
+
+                <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-3">
+                    <h3 class="text-2xl font-black uppercase tracking-tight">
+                        Professor Estagiário de Robótica
+                    </h3>
+                    <span class="text-red-600 font-black text-lg">
+                    Out/2021 – Jan/2022
+                </span>
+                </div>
+
+                <p class="text-xl font-bold text-zinc-500 mb-6">
+                    Oficina do Amanhã | Uberlândia - MG
+                </p>
+
+                <ul class="space-y-4 text-zinc-700 leading-relaxed">
+                    <li class="flex gap-3">
+                        <span class="text-red-600 font-bold">»</span>
+                        <span>
+                        Atuação como instrutor em projeto social, ministrando aulas de robótica e lógica
+                        de programação para mais de 30 crianças e adolescentes.
+                    </span>
+                    </li>
+
+                    <li class="flex gap-3">
+                        <span class="text-red-600 font-bold">»</span>
+                        <span>
+                        Ensino de fundamentos de eletrônica e Arduino, traduzindo conceitos técnicos
+                        complexos para diferentes níveis de aprendizado.
+                    </span>
+                    </li>
+
+                    <li class="flex gap-3">
+                        <span class="text-red-600 font-bold">»</span>
+                        <span>
+                        Desenvolvimento de habilidades de comunicação técnica, didática e liderança.
+                    </span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- EDUCAÇÃO -->
+    <section>
+        <div class="flex items-center gap-4 mb-6">
+            <div class="h-10 w-2 bg-red-600"></div>
+            <h2 class="text-4xl font-black uppercase tracking-tight">Educação</h2>
+        </div>
+
+        <p class="text-xl text-zinc-700">
+            Bacharel em Engenharia Mecânica – Centro Universitário UNA
+        </p>
+    </section>
+
+    <!-- CURRÍCULO -->
+    <section>
+        <div class="flex justify-between items-end border-b-4 border-black pb-4 mb-8">
+            <div class="flex items-center gap-4">
+                <div class="h-10 w-2 bg-red-600"></div>
+                <h2 class="text-4xl font-black uppercase tracking-tight">Currículo</h2>
+            </div>
+            <a class="bg-red-600 text-white px-6 py-2 rounded-full font-black uppercase text-xs tracking-widest hover:bg-black transition-colors" download
+               href="curriculo.pdf">
+                Download PDF
+            </a>
+        </div>
+
+        <div class="w-full aspect-[1/1.414] bg-white rounded-2xl shadow-2xl border-2 border-zinc-100 overflow-hidden">
+            <iframe class="w-full h-full" src="curriculo.pdf#view=FitH"></iframe>
+        </div>
+    </section>
+
+</main>
+
+<footer class="bg-black text-white py-12 text-center relative">
+    <!-- extracted top "border" stripe: 50% red, 50% white -->
+    <div class="absolute top-0 left-0 w-full h-2 spfc-gradient"></div>
+
+    <button class="absolute -top-6 left-1/2 -translate-x-1/2 bg-red-600 w-12 h-12 rounded-full flex items-center justify-center shadow-xl hover:bg-white hover:text-red-600 transition-all floating-button"
+            onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <i data-lucide="arrow-up"></i>
+    </button>
+    <p class="text-zinc-500 font-bold uppercase tracking-widest text-sm">
+        &copy; 2026 Yuri Vilela. Todos os direitos reservados.
+    </p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+    lucide.createIcons();
+
+    let clickCount = 0;
+    const nameElement = document.getElementById('name');
+
+    nameElement.addEventListener('click', () => {
+        clickCount++;
+
+        // Visual feedback on each click
+        nameElement.style.transform = `scale(${1 + clickCount * 0.1})`;
+        nameElement.style.color = clickCount === 1 ? '#fff' : clickCount === 2 ? '#e11d48' : '#fff';
+
+        if (clickCount === 3) {
+            document.body.classList.toggle('tricolor-border');
+            const isSPFC = document.body.classList.contains('tricolor-border');
+
+            if (isSPFC) {
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: {y: 0.6},
+                    colors: ['#000000', '#ffffff', '#e11d48']
+                });
+
+                const message = document.createElement('div');
+                message.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 spfc-gradient rounded-full border border-white"></div>
+                        <span class="font-black">SÃO PAULO FUTEBOL CLUBE</span>
+                    </div>
+                `;
+                message.className = "fixed bottom-10 right-6 bg-black text-white px-6 py-4 rounded-2xl text-lg shadow-2xl border-2 border-red-600 animate-bounce z-50";
+                document.body.appendChild(message);
+
+                setTimeout(() => {
+                    message.classList.add('opacity-0', 'transition-opacity', 'duration-1000');
+                    setTimeout(() => message.remove(), 1000);
+                }, 4000);
+            }
+
+            // Reset effects
+            setTimeout(() => {
+                nameElement.style.transform = '';
+                nameElement.style.color = '';
+            }, 500);
+
+            clickCount = 0;
+        }
+    });
+
+    // Experience cards hover effect (optional but nice)
+    document.querySelectorAll('#experiencia > div > div').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.classList.add('translate-x-2');
+        });
+        card.addEventListener('mouseleave', () => {
+            card.classList.remove('translate-x-2');
+        });
+    });
+</script>
+
 </body>
 </html>
