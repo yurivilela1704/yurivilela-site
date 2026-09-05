@@ -1,9 +1,18 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html class="scroll-smooth" lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Yuri Vilela | Desenvolvedor Fullstack</title>
+    <title>Yuri Vilela | Head de Engenharia</title>
+
+    <!-- Evita flash de tema claro antes do CSS carregar -->
+    <script>
+        (() => {
+            const saved = localStorage.getItem('theme');
+            const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.classList.toggle('dark', dark);
+        })();
+    </script>
 
     <!-- Favicons -->
     <link href="favicon.ico" rel="icon" type="image/x-icon"> <!-- Default favicon -->
@@ -14,25 +23,41 @@
     <link href="web-app-manifest-192x192.png" rel="icon" sizes="192x192">
     <link href="web-app-manifest-512x512.png" rel="icon" sizes="512x512">
 
+    <meta content="#1c1917" media="(prefers-color-scheme: dark)" name="theme-color">
+    <meta content="#fafaf9" media="(prefers-color-scheme: light)" name="theme-color">
 
-    <meta content="Yuri Vilela - Desenvolvedor Fullstack especializado em Laravel, PHP e modernização de sistemas legados."
+    <meta content="Yuri Vilela - Head de Engenharia e desenvolvedor fullstack, especializado em Laravel, PHP e modernização de sistemas legados."
           name="description">
     <meta content="Yuri Vilela" name="author">
+    <link href="https://yurivilela.com.br/" rel="canonical">
+
+    <!-- Open Graph / Twitter -->
+    <meta content="website" property="og:type">
+    <meta content="pt_BR" property="og:locale">
+    <meta content="https://yurivilela.com.br/" property="og:url">
+    <meta content="Yuri Vilela | Head de Engenharia" property="og:title">
+    <meta content="Head de Engenharia e desenvolvedor fullstack, especializado em Laravel, PHP e modernização de sistemas legados."
+          property="og:description">
+    <meta content="https://yurivilela.com.br/eu.jpeg" property="og:image">
+    <meta content="summary_large_image" name="twitter:card">
+
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
+          rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {darkMode: 'class'};
+    </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
-
         body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
         }
 
         .tricolor-border {
             border-image: linear-gradient(to right, #e11d48 33%, #fff 33%, #fff 66%, #000 66%) 1;
-            /*border-image: linear-gradient(to right, #000 33%, #fff 33%, #fff 66%, #e11d48 66%) 1;*/
             border-width: 8px;
             border-style: solid;
         }
@@ -42,331 +67,575 @@
             background: linear-gradient(135deg, #e11d48 0%, #e11d48 40%, #fff 40%, #fff 60%, #000 60%, #000 100%);
         }
 
-        .floating-button {
-            animation: bounce 2s infinite;
+        /* Entrada suave das seções — a classe só é aplicada via JS,
+           então sem JS o conteúdo aparece normalmente */
+        .reveal {
+            opacity: 0;
+            transform: translateY(1.25rem);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
+        .reveal.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
             }
-            40% {
-                transform: translateY(-10px);
+
+            .reveal {
+                opacity: 1;
+                transform: none;
             }
-            60% {
-                transform: translateY(-5px);
+
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
+        }
+
+        /* Ícones do Lucide só aparecem depois de renderizados, evita "piscar" o <i> vazio.
+           GitHub e LinkedIn são SVG inline (Simple Icons, CC0) porque o Lucide
+           removeu os ícones de marca do pacote. */
+        [data-lucide]:not(svg) {
+            visibility: hidden;
         }
     </style>
 </head>
 
-<body class="bg-white text-black antialiased transition-all duration-500">
+<body class="bg-stone-50 text-stone-900 antialiased transition-colors duration-500 selection:bg-rose-700 selection:text-white dark:bg-stone-950 dark:text-stone-200">
 
-<header class="bg-black text-white border-b-4 border-red-600">
-    <div class="max-w-5xl mx-auto px-4 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<a class="sr-only focus:not-sr-only focus:absolute focus:z-[60] focus:m-3 focus:rounded-full focus:bg-rose-700 focus:px-5 focus:py-2 focus:text-sm focus:font-bold focus:uppercase focus:tracking-widest focus:text-white"
+   href="#conteudo">
+    Pular para o conteúdo
+</a>
 
-        <div class="flex items-center gap-6">
-            <div class="w-24 h-24 rounded-full border-4 border-red-600 overflow-hidden bg-zinc-800 shrink-0">
-                <img alt="Yuri Vilela" class="w-full h-full object-cover" src="eu.jpeg">
+<!-- Barra fina que aparece ao rolar além do cabeçalho -->
+<div class="pointer-events-none fixed inset-x-0 top-0 z-50 -translate-y-full opacity-0 transition-all duration-300"
+     id="sticky-bar">
+    <div class="border-b border-stone-200/80 bg-stone-50/85 backdrop-blur-md dark:border-stone-800/80 dark:bg-stone-950/85">
+        <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
+            <a class="pointer-events-auto flex items-center gap-2.5 text-sm font-bold tracking-tight" href="#conteudo">
+                <span class="h-5 w-1 rounded-full bg-rose-700 dark:bg-rose-500"></span>
+                Yuri Vilela
+            </a>
+            <nav aria-label="Navegação rápida" class="pointer-events-auto">
+                <ul class="flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.14em] text-stone-500 dark:text-stone-400">
+                    <li><a class="transition-colors hover:text-rose-700 dark:hover:text-rose-400" href="#sobre">Sobre</a>
+                    </li>
+                    <li class="hidden sm:block"><a class="transition-colors hover:text-rose-700 dark:hover:text-rose-400"
+                                                   href="#experiencia">Experiência</a></li>
+                    <li class="hidden sm:block"><a class="transition-colors hover:text-rose-700 dark:hover:text-rose-400"
+                                                   href="#educacao">Educação</a></li>
+                    <li><a class="transition-colors hover:text-rose-700 dark:hover:text-rose-400" href="#curriculo">Currículo</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<header class="relative overflow-hidden bg-stone-900 text-stone-100">
+    <!-- brilho sutil atrás do conteúdo -->
+    <div aria-hidden="true"
+         class="pointer-events-none absolute -left-24 -top-32 h-80 w-80 rounded-full bg-rose-700/20 blur-3xl"></div>
+    <div aria-hidden="true"
+         class="pointer-events-none absolute -bottom-40 right-0 h-80 w-80 rounded-full bg-stone-500/10 blur-3xl"></div>
+
+    <div class="relative mx-auto flex max-w-5xl flex-col items-center justify-between gap-8 px-4 py-12 md:flex-row md:py-16">
+
+        <div class="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left">
+            <div class="relative shrink-0">
+                <div aria-hidden="true"
+                     class="absolute -inset-1 rounded-full bg-gradient-to-br from-rose-600 to-rose-900 opacity-70 blur-[2px]"></div>
+                <img alt="Retrato de Yuri Vilela"
+                     class="relative h-28 w-28 rounded-full object-cover ring-2 ring-stone-900" decoding="async"
+                     height="112" src="eu.jpeg" width="112">
             </div>
 
             <div>
-                <h1 class="text-2xl md:text-2xl font-black tracking-tighter cursor-pointer" id="name">
+                <h1 class="text-3xl font-black tracking-tighter md:text-4xl" id="name">
                     Yuri Vilela
                 </h1>
-                <p class="text-red-500 font-bold tracking-widest text-sm md:text-base">
+                <p class="mt-1 text-sm font-semibold tracking-wide text-stone-300 md:text-base">
+                    Head de Engenharia
+                    <span aria-hidden="true" class="mx-1.5 text-stone-600">·</span>
                     Desenvolvedor Fullstack
                 </p>
 
-                <div class="flex gap-4 mt-3">
-                    <a aria-label="GitHub" href="https://github.com/yurivilela1704" rel="noopener noreferrer"
-                       target="_blank">
-                        <i class="w-6 h-6 hover:text-red-500 transition-colors" data-lucide="github"></i>
+                <div class="mt-4 flex justify-center gap-2 sm:justify-start">
+                    <a aria-label="GitHub"
+                       class="rounded-full border border-stone-700 p-2 text-stone-300 transition-colors hover:border-rose-500 hover:text-rose-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
+                       href="https://github.com/yurivilela1704" rel="noopener noreferrer" target="_blank">
+                        <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
                     </a>
-                    <a aria-label="LinkedIn" href="https://www.linkedin.com/in/yuri-vilela/" rel="noopener noreferrer"
-                       target="_blank">
-                        <i class="w-6 h-6 hover:text-red-500 transition-colors" data-lucide="linkedin"></i>
+                    <a aria-label="LinkedIn"
+                       class="rounded-full border border-stone-700 p-2 text-stone-300 transition-colors hover:border-rose-500 hover:text-rose-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
+                       href="https://www.linkedin.com/in/yuri-vilela/" rel="noopener noreferrer" target="_blank">
+                        <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                     </a>
-                    <a aria-label="Email" href="mailto:yurimarquez1704@gmail.com">
-                        <i class="w-6 h-6 hover:text-red-500 transition-colors" data-lucide="mail"></i>
+                    <a aria-label="E-mail"
+                       class="rounded-full border border-stone-700 p-2 text-stone-300 transition-colors hover:border-rose-500 hover:text-rose-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
+                       href="mailto:yurimarquez1704@gmail.com">
+                        <i aria-hidden="true" class="h-5 w-5" data-lucide="mail"></i>
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="flex flex-col items-end gap-2">
-            <div class="text-[10px] text-zinc-400 uppercase tracking-[0.2em] font-bold text-right">
-                Uberlândia - MG | São Carlos - SP | Brasil
-            </div>
+        <div class="flex flex-col items-center gap-4 md:items-end">
+            <button aria-label="Alternar tema claro e escuro"
+                    class="rounded-full border border-stone-700 p-2 text-stone-300 transition-colors hover:border-rose-500 hover:text-rose-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
+                    id="theme-toggle" type="button">
+                <i aria-hidden="true" class="h-5 w-5" data-lucide="sun-moon"></i>
+            </button>
+
+            <nav aria-label="Seções do site">
+                <ul class="flex flex-wrap justify-center gap-x-5 gap-y-1 text-[11px] font-bold uppercase tracking-[0.14em] text-stone-400">
+                    <li><a class="transition-colors hover:text-rose-400" href="#sobre">Sobre</a></li>
+                    <li><a class="transition-colors hover:text-rose-400" href="#experiencia">Experiência</a></li>
+                    <li><a class="transition-colors hover:text-rose-400" href="#educacao">Educação</a></li>
+                    <li><a class="transition-colors hover:text-rose-400" href="#curriculo">Currículo</a></li>
+                </ul>
+            </nav>
+
+            <p class="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+                <i aria-hidden="true" class="h-3 w-3" data-lucide="map-pin"></i>
+                Uberlândia - MG | São Carlos - SP
+            </p>
         </div>
 
     </div>
+
+    <div aria-hidden="true"
+         class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-rose-700 to-transparent"></div>
 </header>
 
-<main class="max-w-5xl mx-auto px-4 py-20 space-y-24">
+<!-- sentinela usada para mostrar/esconder a barra fixa -->
+<div aria-hidden="true" id="header-sentinel"></div>
+
+<main class="mx-auto max-w-5xl space-y-24 px-4 py-20 md:space-y-32" id="conteudo">
 
     <!-- SOBRE -->
-    <section>
-        <div class="flex items-center gap-4 mb-8">
-            <div class="h-10 w-2 bg-red-600"></div>
-            <h2 class="text-4xl font-black uppercase tracking-tight">Sobre Mim</h2>
+    <section class="scroll-mt-20" id="sobre">
+        <div class="mb-8 flex items-center gap-4">
+            <span aria-hidden="true" class="h-8 w-1.5 rounded-full bg-rose-700 dark:bg-rose-500"></span>
+            <h2 class="text-3xl font-black uppercase tracking-tight md:text-4xl">Sobre Mim</h2>
         </div>
 
-        <div class="space-y-6 text-xl text-zinc-700 leading-relaxed max-w-4xl">
+        <div class="max-w-4xl space-y-6 text-lg leading-relaxed text-stone-700 md:text-xl dark:text-stone-300">
             <p>
-                Desenvolvedor fullstack com forte atuação em backend, especializado na modernização de aplicações
-                legadas
-                e evolução arquitetural de sistemas em produção. Experiência sólida com PHP, Laravel e ecossistema SQL,
-                mantendo abertura e adaptabilidade a diferentes stacks e contextos tecnológicos. Sempre com foco em
-                estabilidade, escalabilidade e qualidade de código.
+                Desenvolvedor fullstack com forte atuação em backend, hoje à frente do time de engenharia do
+                NoCartorio.com. Especializado na modernização de aplicações legadas e evolução arquitetural de sistemas
+                em produção, com experiência sólida em PHP, Laravel e ecossistema SQL — mantendo abertura e
+                adaptabilidade a diferentes stacks e contextos tecnológicos.
             </p>
 
             <p>
-                Atuo no desenvolvimento e evolução contínua do sistema, contribuindo com refatorações estruturais,
-                atualização de dependências críticas e migrações entre versões major de frameworks, sempre com foco em
-                estabilidade, performance e redução de dívida técnica.
+                Além do desenvolvimento, conduzo as decisões técnicas e arquiteturais do produto: definição de padrões,
+                priorização de dívida técnica, atualização de dependências críticas e migrações entre versões major de
+                frameworks. Sempre com foco em estabilidade, escalabilidade, performance e qualidade de código.
             </p>
 
-            <div class="flex flex-wrap gap-3 pt-6">
-                <span class="bg-black text-white px-4 py-1.5 text-xs font-black rounded-full uppercase tracking-widest border border-red-600/30 hover:scale-110 hover:border-red-600 transition-all cursor-default">PHP / Laravel</span>
-                <span class="bg-black text-white px-4 py-1.5 text-xs font-black rounded-full uppercase tracking-widest border border-red-600/30 hover:scale-110 hover:border-red-600 transition-all cursor-default">SQL</span>
-                <span class="bg-black text-white px-4 py-1.5 text-xs font-black rounded-full uppercase tracking-widest border border-red-600/30 hover:scale-110 hover:border-red-600 transition-all cursor-default">Docker</span>
-                <span class="bg-black text-white px-4 py-1.5 text-xs font-black rounded-full uppercase tracking-widest border border-red-600/30 hover:scale-110 hover:border-red-600 transition-all cursor-default">ElasticSearch</span>
-                <span class="bg-black text-white px-4 py-1.5 text-xs font-black rounded-full uppercase tracking-widest border border-red-600/30 hover:scale-110 hover:border-red-600 transition-all cursor-default">Git</span>
-            </div>
-
+            <ul class="flex flex-wrap gap-2.5 pt-4">
+                <li class="cursor-default rounded-full border border-stone-300 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-stone-700 transition-colors hover:border-rose-700 hover:text-rose-700 dark:border-stone-700 dark:text-stone-300 dark:hover:border-rose-500 dark:hover:text-rose-400">
+                    PHP / Laravel
+                </li>
+                <li class="cursor-default rounded-full border border-stone-300 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-stone-700 transition-colors hover:border-rose-700 hover:text-rose-700 dark:border-stone-700 dark:text-stone-300 dark:hover:border-rose-500 dark:hover:text-rose-400">
+                    SQL
+                </li>
+                <li class="cursor-default rounded-full border border-stone-300 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-stone-700 transition-colors hover:border-rose-700 hover:text-rose-700 dark:border-stone-700 dark:text-stone-300 dark:hover:border-rose-500 dark:hover:text-rose-400">
+                    Docker
+                </li>
+                <li class="cursor-default rounded-full border border-stone-300 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-stone-700 transition-colors hover:border-rose-700 hover:text-rose-700 dark:border-stone-700 dark:text-stone-300 dark:hover:border-rose-500 dark:hover:text-rose-400">
+                    ElasticSearch
+                </li>
+                <li class="cursor-default rounded-full border border-stone-300 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-stone-700 transition-colors hover:border-rose-700 hover:text-rose-700 dark:border-stone-700 dark:text-stone-300 dark:hover:border-rose-500 dark:hover:text-rose-400">
+                    Git
+                </li>
+                <li class="cursor-default rounded-full border border-rose-700/40 bg-rose-700/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-rose-700 transition-colors hover:border-rose-700 dark:border-rose-500/40 dark:bg-rose-500/10 dark:text-rose-400 dark:hover:border-rose-400">
+                    Liderança Técnica
+                </li>
+            </ul>
         </div>
     </section>
 
-    <section class="space-y-12" id="experiencia">
-        <div class="flex items-center gap-4">
-            <div class="h-10 w-2 bg-red-600"></div>
-            <h2 class="text-4xl font-black uppercase tracking-tight">Experiência</h2>
+    <!-- EXPERIÊNCIA -->
+    <section class="scroll-mt-20" id="experiencia">
+        <div class="mb-10 flex items-center gap-4">
+            <span aria-hidden="true" class="h-8 w-1.5 rounded-full bg-rose-700 dark:bg-rose-500"></span>
+            <h2 class="text-3xl font-black uppercase tracking-tight md:text-4xl">Experiência</h2>
         </div>
 
-        <div class="space-y-16">
+        <div class="relative space-y-6 md:pl-10">
+            <!-- trilho da timeline -->
+            <div aria-hidden="true"
+                 class="absolute bottom-6 left-0 top-6 hidden w-px bg-stone-200 md:block dark:bg-stone-800"></div>
 
-            <!-- NoCartorio -->
-            <div class="group relative pl-10 border-l-2 border-zinc-200 hover:border-red-600 transition-colors duration-300">
+            <!-- NoCartorio · Head de Engenharia -->
+            <article class="group relative rounded-2xl border border-stone-200 bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-rose-700/40 hover:shadow-xl hover:shadow-stone-900/5 md:p-8 dark:border-stone-800 dark:bg-stone-900/50 dark:hover:border-rose-500/40 dark:hover:shadow-black/40">
+                <span aria-hidden="true"
+                      class="absolute -left-10 top-9 hidden h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-rose-700 bg-stone-50 transition-colors duration-300 group-hover:bg-rose-700 md:block dark:border-rose-500 dark:bg-stone-950 dark:group-hover:bg-rose-500"></span>
 
-                <!-- marcador -->
-                <div class="absolute -left-[11px] top-1 w-5 h-5 bg-white border-2 border-red-600 rounded-full group-hover:bg-red-600 transition-colors duration-300"></div>
-
-                <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-3">
-                    <h3 class="text-2xl font-black uppercase tracking-tight">
-                        Software Developer
+                <div class="mb-2 flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between md:gap-4">
+                    <h3 class="text-xl font-black uppercase tracking-tight md:text-2xl">
+                        Head de Engenharia
                     </h3>
-                    <span class="text-red-600 font-black text-lg">
-                    2022 – Atual
-                </span>
+                    <p class="shrink-0 font-mono text-sm font-semibold text-rose-700 dark:text-rose-400">
+                        <time datetime="2026-03">Mar/2026</time>
+                        – Atual
+                    </p>
                 </div>
 
-                <p class="text-xl font-bold text-zinc-500 mb-6">
+                <p class="mb-6 text-base font-semibold text-stone-500 dark:text-stone-400">
                     NoCartorio.com
                 </p>
 
-                <ul class="space-y-4 text-zinc-700 leading-relaxed">
+                <ul class="space-y-3.5 leading-relaxed text-stone-700 dark:text-stone-300">
                     <li class="flex gap-3">
-                        <span class="text-red-600 font-bold">»</span>
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
                         <span>
-                            Atuo na integração do sistema com tribunais estaduais como TJTO, TJPA, TJMG, contribuindo
-                            para a expansão do produto para novos estados.
-
-                            Também participei da integração com centrais nacionais como SIRC, CRC, ONR, CENSEC, CNIB,
-                            atuando na implementação de web services, tratamento de layouts específicos e adequação às normas de cada órgão.
+                            Lidero o time de desenvolvimento, conduzindo as decisões técnicas e arquiteturais do
+                            produto — da definição de padrões e prioridades técnicas ao acompanhamento da execução.
                         </span>
                     </li>
-
                     <li class="flex gap-3">
-                        <span class="text-red-600 font-bold">»</span>
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
+                        <span>
+                            Responsável pelo direcionamento técnico do roadmap junto ao time de produto, traduzindo
+                            necessidades de negócio em planos de engenharia viáveis e sustentáveis.
+                        </span>
+                    </li>
+                    <li class="flex gap-3">
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
+                        <span>
+                            Code review, mentoria e definição de padrões de desenvolvimento, elevando a consistência e a
+                            qualidade do que o time entrega.
+                        </span>
+                    </li>
+                    <li class="flex gap-3">
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
+                        <span>
+                            Gestão da dívida técnica e da confiabilidade da plataforma em produção, equilibrando
+                            evolução de produto e sustentação.
+                        </span>
+                    </li>
+                    <li class="flex gap-3">
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
+                        <span>
+                            Sigo atuando mão na massa nas frentes mais críticas de backend, integrações e performance.
+                        </span>
+                    </li>
+                </ul>
+            </article>
+
+            <!-- NoCartorio · Software Developer -->
+            <article class="group relative rounded-2xl border border-stone-200 bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-rose-700/40 hover:shadow-xl hover:shadow-stone-900/5 md:p-8 dark:border-stone-800 dark:bg-stone-900/50 dark:hover:border-rose-500/40 dark:hover:shadow-black/40">
+                <span aria-hidden="true"
+                      class="absolute -left-10 top-9 hidden h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-rose-700 bg-stone-50 transition-colors duration-300 group-hover:bg-rose-700 md:block dark:border-rose-500 dark:bg-stone-950 dark:group-hover:bg-rose-500"></span>
+
+                <div class="mb-2 flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between md:gap-4">
+                    <h3 class="text-xl font-black uppercase tracking-tight md:text-2xl">
+                        Software Developer
+                    </h3>
+                    <p class="shrink-0 font-mono text-sm font-semibold text-rose-700 dark:text-rose-400">
+                        <time datetime="2022">2022</time>
+                        –
+                        <time datetime="2026-03">Mar/2026</time>
+                    </p>
+                </div>
+
+                <p class="mb-6 text-base font-semibold text-stone-500 dark:text-stone-400">
+                    NoCartorio.com
+                </p>
+
+                <ul class="space-y-3.5 leading-relaxed text-stone-700 dark:text-stone-300">
+                    <li class="flex gap-3">
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
+                        <span>
+                            Integração do sistema com tribunais estaduais como TJTO, TJPA e TJMG, contribuindo para a
+                            expansão do produto para novos estados. Também participei da integração com centrais
+                            nacionais como SIRC, CRC, ONR, CENSEC e CNIB, atuando na implementação de web services,
+                            tratamento de layouts específicos e adequação às normas de cada órgão.
+                        </span>
+                    </li>
+                    <li class="flex gap-3">
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
                         <span>
                             Fui responsável por conduzir a migração do sistema principal de Laravel 5 para Laravel 11,
                             com apoio da equipe, garantindo estabilidade e continuidade operacional.
                         </span>
                     </li>
-
                     <li class="flex gap-3">
-                        <span class="text-red-600 font-bold">»</span>
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
                         <span>
-                        Atualização e substituição de dependências, reduzindo dívida técnica, focando em melhorias
+                            Atualização e substituição de dependências, reduzindo dívida técnica e focando em melhorias
                             de performance, usabilidade e segurança da aplicação.
-                    </span>
+                        </span>
                     </li>
-
                     <li class="flex gap-3">
-                        <span class="text-red-600 font-bold">»</span>
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
                         <span>
-                        Implementação do ElasticSearch do zero utilizando
-                        <code class="bg-zinc-100 px-1.5 py-0.5 rounded font-mono text-sm text-red-600">
-                            babenkoivan/elastic-scout-driver
-                        </code>, estruturando sistema de busca escalável e performático.
-                    </span>
+                            Implementação do ElasticSearch do zero utilizando
+                            <code class="rounded bg-stone-100 px-1.5 py-0.5 font-mono text-sm text-rose-700 dark:bg-stone-800 dark:text-rose-400">babenkoivan/elastic-scout-driver</code>,
+                            estruturando um sistema de busca escalável e performático.
+                        </span>
                     </li>
-
                     <li class="flex gap-3">
-                        <span class="text-red-600 font-bold">»</span>
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
                         <span>
-                            Participação em decisões arquiteturais e de produto, contribuindo para definição de padrões e
-                            melhoria contínua da estrutura do projeto.
+                            Participação em decisões arquiteturais e de produto, contribuindo para a definição de
+                            padrões e a melhoria contínua da estrutura do projeto.
                         </span>
                     </li>
                 </ul>
-            </div>
+            </article>
 
             <!-- Robótica -->
-            <div class="group relative pl-10 border-l-2 border-zinc-200 hover:border-red-600 transition-colors duration-300">
+            <article class="group relative rounded-2xl border border-stone-200 bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-rose-700/40 hover:shadow-xl hover:shadow-stone-900/5 md:p-8 dark:border-stone-800 dark:bg-stone-900/50 dark:hover:border-rose-500/40 dark:hover:shadow-black/40">
+                <span aria-hidden="true"
+                      class="absolute -left-10 top-9 hidden h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-rose-700 bg-stone-50 transition-colors duration-300 group-hover:bg-rose-700 md:block dark:border-rose-500 dark:bg-stone-950 dark:group-hover:bg-rose-500"></span>
 
-                <!-- marcador -->
-                <div class="absolute -left-[11px] top-1 w-5 h-5 bg-white border-2 border-red-600 rounded-full group-hover:bg-red-600 transition-colors duration-300"></div>
-
-                <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-3">
-                    <h3 class="text-2xl font-black uppercase tracking-tight">
+                <div class="mb-2 flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between md:gap-4">
+                    <h3 class="text-xl font-black uppercase tracking-tight md:text-2xl">
                         Professor Estagiário de Robótica
                     </h3>
-                    <span class="text-red-600 font-black text-lg">
-                    Out/2021 – Jan/2022
-                </span>
+                    <p class="shrink-0 font-mono text-sm font-semibold text-rose-700 dark:text-rose-400">
+                        <time datetime="2021-10">Out/2021</time>
+                        –
+                        <time datetime="2022-01">Jan/2022</time>
+                    </p>
                 </div>
 
-                <p class="text-xl font-bold text-zinc-500 mb-6">
+                <p class="mb-6 text-base font-semibold text-stone-500 dark:text-stone-400">
                     Oficina do Amanhã | Uberlândia - MG
                 </p>
 
-                <ul class="space-y-4 text-zinc-700 leading-relaxed">
+                <ul class="space-y-3.5 leading-relaxed text-stone-700 dark:text-stone-300">
                     <li class="flex gap-3">
-                        <span class="text-red-600 font-bold">»</span>
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
                         <span>
-                        Atuação como instrutor em projeto social, ministrando aulas de robótica e lógica
-                        de programação para mais de 30 crianças e adolescentes.
-                    </span>
+                            Atuação como instrutor em projeto social, ministrando aulas de robótica e lógica de
+                            programação para mais de 30 crianças e adolescentes.
+                        </span>
                     </li>
-
                     <li class="flex gap-3">
-                        <span class="text-red-600 font-bold">»</span>
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
                         <span>
-                        Ensino de fundamentos de eletrônica e Arduino, traduzindo conceitos técnicos
-                        complexos para diferentes níveis de aprendizado.
-                    </span>
+                            Ensino de fundamentos de eletrônica e Arduino, traduzindo conceitos técnicos complexos para
+                            diferentes níveis de aprendizado.
+                        </span>
                     </li>
-
                     <li class="flex gap-3">
-                        <span class="text-red-600 font-bold">»</span>
+                        <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-700 dark:bg-rose-500"></span>
                         <span>
-                        Desenvolvimento de habilidades de comunicação técnica, didática e liderança.
-                    </span>
+                            Desenvolvimento de habilidades de comunicação técnica, didática e liderança.
+                        </span>
                     </li>
                 </ul>
-            </div>
+            </article>
 
         </div>
     </section>
 
     <!-- EDUCAÇÃO -->
-    <section>
-        <div class="flex items-center gap-4 mb-6">
-            <div class="h-10 w-2 bg-red-600"></div>
-            <h2 class="text-4xl font-black uppercase tracking-tight">Educação</h2>
+    <section class="scroll-mt-20" id="educacao">
+        <div class="mb-6 flex items-center gap-4">
+            <span aria-hidden="true" class="h-8 w-1.5 rounded-full bg-rose-700 dark:bg-rose-500"></span>
+            <h2 class="text-3xl font-black uppercase tracking-tight md:text-4xl">Educação</h2>
         </div>
 
-        <p class="text-xl text-zinc-700">
-            Bacharel em Engenharia Mecânica – Centro Universitário UNA
-        </p>
+        <div class="flex items-start gap-4 rounded-2xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900/50">
+            <i aria-hidden="true" class="mt-0.5 h-6 w-6 shrink-0 text-rose-700 dark:text-rose-400"
+               data-lucide="graduation-cap"></i>
+            <div>
+                <p class="text-lg font-bold">Bacharel em Engenharia Mecânica</p>
+                <p class="text-stone-500 dark:text-stone-400">Centro Universitário UNA</p>
+            </div>
+        </div>
     </section>
 
     <!-- CURRÍCULO -->
-    <section>
-        <div class="flex justify-between items-end border-b-4 border-black pb-4 mb-8">
+    <section class="scroll-mt-20" id="curriculo">
+        <div class="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-stone-200 pb-5 dark:border-stone-800">
             <div class="flex items-center gap-4">
-                <div class="h-10 w-2 bg-red-600"></div>
-                <h2 class="text-4xl font-black uppercase tracking-tight">Currículo</h2>
+                <span aria-hidden="true" class="h-8 w-1.5 rounded-full bg-rose-700 dark:bg-rose-500"></span>
+                <h2 class="text-3xl font-black uppercase tracking-tight md:text-4xl">Currículo</h2>
             </div>
-            <a class="bg-red-600 text-white px-6 py-2 rounded-full font-black uppercase text-xs tracking-widest hover:bg-black transition-colors" download
-               href="curriculo.pdf">
+            <a class="flex items-center gap-2 rounded-full bg-rose-700 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+               download href="curriculo.pdf">
+                <i aria-hidden="true" class="h-4 w-4" data-lucide="download"></i>
                 Download PDF
             </a>
         </div>
 
-        <div class="w-full aspect-[1/1.414] bg-white rounded-2xl shadow-2xl border-2 border-zinc-100 overflow-hidden">
-            <iframe class="w-full h-full" src="curriculo.pdf#view=FitH"></iframe>
+        <!-- iframe de PDF não funciona na maioria dos navegadores mobile: só exibimos em telas maiores -->
+        <div class="hidden aspect-[1/1.414] w-full overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-xl shadow-stone-900/5 md:block dark:border-stone-800 dark:shadow-black/40">
+            <iframe class="h-full w-full" loading="lazy" src="curriculo.pdf#view=FitH"
+                    title="Currículo de Yuri Vilela em PDF"></iframe>
         </div>
+        <a class="flex w-full items-center justify-center gap-3 rounded-2xl border border-stone-200 bg-white px-6 py-10 text-sm font-bold uppercase tracking-widest transition-colors hover:border-rose-700 hover:text-rose-700 md:hidden dark:border-stone-800 dark:bg-stone-900/50 dark:hover:border-rose-500 dark:hover:text-rose-400"
+           href="curriculo.pdf" rel="noopener" target="_blank">
+            <i aria-hidden="true" class="h-5 w-5" data-lucide="file-text"></i>
+            Abrir currículo em PDF
+        </a>
     </section>
 
 </main>
 
-<footer class="bg-black text-white py-12 text-center relative">
-    <!-- extracted top "border" stripe: 50% red, 50% white -->
-    <div class="absolute top-0 left-0 w-full h-2 spfc-gradient"></div>
-
-    <button class="absolute -top-6 left-1/2 -translate-x-1/2 bg-red-600 w-12 h-12 rounded-full flex items-center justify-center shadow-xl hover:bg-white hover:text-red-600 transition-all floating-button"
-            onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-        <i data-lucide="arrow-up"></i>
+<footer class="relative border-t border-stone-200 bg-stone-100 py-12 text-center dark:border-stone-800 dark:bg-stone-900">
+    <button aria-label="Voltar ao topo"
+            class="absolute -top-6 left-1/2 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full bg-rose-700 text-white shadow-lg shadow-rose-900/20 transition-all hover:-translate-y-0.5 hover:bg-rose-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700"
+            id="back-to-top" type="button">
+        <i aria-hidden="true" class="h-5 w-5" data-lucide="arrow-up"></i>
     </button>
-    <p class="text-zinc-500 font-bold uppercase tracking-widest text-sm">
-        &copy; 2026 Yuri Vilela. Todos os direitos reservados.
-    </p>
+
+    <div class="mx-auto max-w-5xl px-4">
+        <div class="mb-5 flex justify-center gap-2">
+            <a aria-label="GitHub"
+               class="rounded-full border border-stone-300 p-2 text-stone-600 transition-colors hover:border-rose-700 hover:text-rose-700 dark:border-stone-700 dark:text-stone-400 dark:hover:border-rose-500 dark:hover:text-rose-400"
+               href="https://github.com/yurivilela1704" rel="noopener noreferrer" target="_blank">
+                <svg aria-hidden="true" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            </a>
+            <a aria-label="LinkedIn"
+               class="rounded-full border border-stone-300 p-2 text-stone-600 transition-colors hover:border-rose-700 hover:text-rose-700 dark:border-stone-700 dark:text-stone-400 dark:hover:border-rose-500 dark:hover:text-rose-400"
+               href="https://www.linkedin.com/in/yuri-vilela/" rel="noopener noreferrer" target="_blank">
+                <svg aria-hidden="true" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a aria-label="E-mail"
+               class="rounded-full border border-stone-300 p-2 text-stone-600 transition-colors hover:border-rose-700 hover:text-rose-700 dark:border-stone-700 dark:text-stone-400 dark:hover:border-rose-500 dark:hover:text-rose-400"
+               href="mailto:yurimarquez1704@gmail.com">
+                <i aria-hidden="true" class="h-4 w-4" data-lucide="mail"></i>
+            </a>
+        </div>
+        <p class="text-xs font-semibold uppercase tracking-[0.15em] text-stone-500 dark:text-stone-500">
+            &copy; <span id="year">2026</span> Yuri Vilela
+        </p>
+    </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Yuri Vilela",
+      "url": "https://yurivilela.com.br/",
+      "image": "https://yurivilela.com.br/eu.jpeg",
+      "jobTitle": "Head de Engenharia",
+      "email": "mailto:yurimarquez1704@gmail.com",
+      "worksFor": {"@type": "Organization", "name": "NoCartorio.com"},
+      "knowsAbout": ["PHP", "Laravel", "SQL", "Docker", "ElasticSearch", "Git", "Liderança técnica"],
+      "sameAs": [
+        "https://github.com/yurivilela1704",
+        "https://www.linkedin.com/in/yuri-vilela/"
+      ]
+    }
+</script>
+
+<script defer src="https://unpkg.com/lucide@1.41.0/dist/umd/lucide.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <script>
-    lucide.createIcons();
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    let clickCount = 0;
-    const nameElement = document.getElementById('name');
+    document.getElementById('back-to-top').addEventListener('click', () => {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    });
 
-    nameElement.addEventListener('click', () => {
-        clickCount++;
+    // Tema: alterna e persiste a escolha do visitante
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+        const dark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+    });
 
-        // Visual feedback on each click
-        nameElement.style.transform = `scale(${1 + clickCount * 0.1})`;
-        nameElement.style.color = clickCount === 1 ? '#fff' : clickCount === 2 ? '#e11d48' : '#fff';
-
-        if (clickCount === 3) {
-            document.body.classList.toggle('tricolor-border');
-            const isSPFC = document.body.classList.contains('tricolor-border');
-
-            if (isSPFC) {
-                confetti({
-                    particleCount: 150,
-                    spread: 70,
-                    origin: {y: 0.6},
-                    colors: ['#000000', '#ffffff', '#e11d48']
-                });
-
-                const message = document.createElement('div');
-                message.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 spfc-gradient rounded-full border border-white"></div>
-                        <span class="font-black">SÃO PAULO FUTEBOL CLUBE</span>
-                    </div>
-                `;
-                message.className = "fixed bottom-10 right-6 bg-black text-white px-6 py-4 rounded-2xl text-lg shadow-2xl border-2 border-red-600 animate-bounce z-50";
-                document.body.appendChild(message);
-
-                setTimeout(() => {
-                    message.classList.add('opacity-0', 'transition-opacity', 'duration-1000');
-                    setTimeout(() => message.remove(), 1000);
-                }, 4000);
-            }
-
-            // Reset effects
-            setTimeout(() => {
-                nameElement.style.transform = '';
-                nameElement.style.color = '';
-            }, 500);
-
-            clickCount = 0;
+    // Enquanto o visitante não escolher, o site acompanha o tema do sistema
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        if (!localStorage.getItem('theme')) {
+            document.documentElement.classList.toggle('dark', event.matches);
         }
     });
 
-    // Experience cards hover effect (optional but nice)
-    document.querySelectorAll('#experiencia > div > div').forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            card.classList.add('translate-x-2');
+    // Barra fixa: aparece quando o cabeçalho sai da tela
+    const stickyBar = document.getElementById('sticky-bar');
+    new IntersectionObserver(([entry]) => {
+        stickyBar.classList.toggle('-translate-y-full', entry.isIntersecting);
+        stickyBar.classList.toggle('opacity-0', entry.isIntersecting);
+    }).observe(document.getElementById('header-sentinel'));
+
+    // Entrada suave das seções conforme entram na viewport
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
         });
-        card.addEventListener('mouseleave', () => {
-            card.classList.remove('translate-x-2');
-        });
+    }, {rootMargin: '0px 0px -10% 0px'});
+
+    document.querySelectorAll('main > section').forEach(section => {
+        section.classList.add('reveal');
+        revealObserver.observe(section);
     });
+
+    window.addEventListener('load', () => window.lucide?.createIcons());
+</script>
+
+<script>
+    /*
+     * Modo tricolor. Duas formas de chamar, ambas discretas:
+     *   - digitar "spfc" ou "tricolor" em qualquer lugar da página;
+     *   - segurar o ano no rodapé por 2 segundos (para quem está no celular).
+     */
+    (() => {
+        const CODES = ['spfc', 'tricolor'];
+        const LONG_PRESS_MS = 2000;
+
+        const toggleTricolor = () => {
+            if (!document.body.classList.toggle('tricolor-border')) return;
+
+            window.confetti?.({
+                particleCount: 150,
+                spread: 70,
+                origin: {y: 0.6},
+                colors: ['#000000', '#ffffff', '#e11d48']
+            });
+
+            const message = document.createElement('div');
+            message.setAttribute('role', 'status');
+            message.className = 'fixed bottom-10 right-6 z-50 flex items-center gap-3 rounded-2xl border-2 border-rose-600 bg-black px-6 py-4 text-lg text-white shadow-2xl';
+            message.innerHTML = `
+                <div class="h-8 w-8 rounded-full border border-white spfc-gradient"></div>
+                <span class="font-black">SÃO PAULO FUTEBOL CLUBE</span>
+            `;
+            document.body.appendChild(message);
+
+            setTimeout(() => {
+                message.classList.add('opacity-0', 'transition-opacity', 'duration-1000');
+                setTimeout(() => message.remove(), 1000);
+            }, 4000);
+        };
+
+        let buffer = '';
+        addEventListener('keydown', event => {
+            if (event.key.length !== 1 || event.metaKey || event.ctrlKey || event.altKey) return;
+            buffer = (buffer + event.key.toLowerCase()).slice(-12);
+            if (CODES.some(code => buffer.endsWith(code))) {
+                buffer = '';
+                toggleTricolor();
+            }
+        });
+
+        const trigger = document.getElementById('year');
+        let timer;
+        const start = () => {
+            timer = setTimeout(toggleTricolor, LONG_PRESS_MS);
+        };
+        const cancel = () => clearTimeout(timer);
+
+        trigger.addEventListener('pointerdown', start);
+        ['pointerup', 'pointerleave', 'pointercancel'].forEach(type => trigger.addEventListener(type, cancel));
+    })();
 </script>
 
 </body>
